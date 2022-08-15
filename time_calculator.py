@@ -83,7 +83,7 @@ def add_time(start, duration, input = None):
 
 
     # include calc for actual days
-    days = ["monday", "tuesday", "wedesnday", "thursday", "friday", "saturday", "sunday"]
+    days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
     if input:
         day = input.lower()
         try:
@@ -113,4 +113,4 @@ def add_time(start, duration, input = None):
     return finalformat
 
 
-print(add_time("6:30 PM", "205:12"))
+print(add_time("8:16 PM", "466:02", "tuesday"))
