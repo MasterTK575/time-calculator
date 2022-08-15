@@ -19,6 +19,8 @@ Process:
     5. Account for returning many days later
 
 What I've learned:
-    1. How to use loops correctly
-    2. How to iterate through AM/PM time formats
+    1. How and when to use while and for loops
+    2. How to iterate through AM/PM time formats using the % operator
     3. How to use variables to keep track of time formats and days
+    4. Refreshed knowledge on various functions and methods
+    5. Made own functions to simplify code; learned to use optinal parameters
