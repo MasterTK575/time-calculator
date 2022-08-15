@@ -1,9 +1,7 @@
 # calculating the minutes would work with 24hrs format, but not with AM/PM
 
 
-def add_time(start, duration, day = None):
-
-    days = ["monday", "tuesday", "wedesnday", "thursday", "friday", "saturday", "sunday"]
+def add_time(start, duration, input = None):
 
     # split by hours and minutes
     def split_hrsmin(time):
@@ -31,7 +29,6 @@ def add_time(start, duration, day = None):
     else:
         extrahrs = 0
 
- 
     # add up hours
     tothrs = hrfrstart[0] + hrfrdur[0] + extrahrs
 
@@ -76,7 +73,7 @@ def add_time(start, duration, day = None):
     # to account for an PM to AM daychange
     if format == "PM" and formcount >= 2:
         daycount = daycount + 1
-    
+
     if daycount == 0:
         message = ""
     elif daycount == 1:
@@ -84,8 +81,34 @@ def add_time(start, duration, day = None):
     else:
         message = " (" + str(daycount) + " days later" + ")"
 
-    
-    finalformat = str(tothrs) + ":" + minutesstr + " " + returnformat + message
+
+    # include calc for actual days
+    days = ["monday", "tuesday", "wedesnday", "thursday", "friday", "saturday", "sunday"]
+    if input:
+        day = input.lower()
+        try:
+            daypos = days.index(day)
+        except:
+            print("Error, please make sure the day is spelled correctly")
+            quit()
+        
+        # basically we do a loop and forward the "week" counter each 7 times and then reset
+        dayiterable = daypos + daycount
+        findday = 0
+
+        while dayiterable > 0:
+            if dayiterable % 7 == 0:
+                findday = findday - 7
+            findday = findday + 1
+            dayiterable = dayiterable -1
+
+        newday = days[findday].capitalize()
+
+    if input:
+        finalformat = str(tothrs) + ":" + minutesstr + " " + returnformat + ", " + newday + message
+
+    else:
+        finalformat = str(tothrs) + ":" + minutesstr + " " + returnformat + message
 
     return finalformat
 
