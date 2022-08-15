@@ -1,45 +1,80 @@
 # calculating the minutes would work with 24hrs format, but not with AM/PM
 
-def add_time(start, duration):
-    # making a dictionary with am/pm to show time format
-    # we can later iterate through it with two variables to show change in day
-    timeformat = dict()
-    timeformat["AM"]= [12, 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10, 11]
-    timeformat["PM"]= [12, 1, 2, 3, 4, 5, 6, 7, 8, 9 ,10, 11]
+
+def add_time(start, duration, day = None):
 
     days = ["monday", "tuesday", "wedesnday", "thursday", "friday", "saturday", "sunday"]
+
+    # split by hours and minutes
+    def split_hrsmin(time):
+        timesplit = time.split(":")
+        hours = int(timesplit[0])
+        minutes = int(timesplit[1])
+        return hours, minutes
 
     # split the start to get time and format
     parameters = start.split()
     format = parameters[1]
     starttime = parameters[0]
-    hourform = starttime.split(":")
 
-    # find the starting point (in AM/PM)
-    if int(hourform[0]) == 12:
-        poshour = 0
+    # get the hr format of start time
+    hrfrstart = split_hrsmin(starttime)
+
+    # get the hr format of duration
+    hrfrdur = split_hrsmin(duration)
+
+    # add up minutes to account for increase in hours
+    minutes = hrfrstart[1] + hrfrdur[1]
+    if minutes >= 60:
+        extrahrs = 1
+        minutes = minutes % 60
     else:
-        poshour = int(hourform[0])
+        extrahrs = 0
+
+ 
+    # add up hours
+    tothrs = hrfrstart[0] + hrfrdur[0] + extrahrs
+
+    # by giving AM a count of 0 and PM a count of 1 we know which time format we are at
+    if format == "AM":
+        formcount = 0
+    else:
+        formcount = 1
+
+    loopcount = tothrs
+    count = 1
+    daycount = 0
+
+    # every 12 counts aka hrs we increase the format counter (we ran through one AM/PM cycle)
+    # every 24 hrs we increase the day counter
+    while loopcount > 0:
+        if count % 12 == 0:
+            formcount = formcount + 1
+            tothrs = tothrs - 12
+        if count % 24 == 0:
+            daycount = daycount + 1
+        count = count + 1
+        loopcount = loopcount -1
+
+    # to account for the loop reducing the total hrs to exactly 0
+    if tothrs == 0:
+        tothrs = 12
+
+    if formcount % 2 == 0:
+        returnformat = "AM"
+    else:
+        returnformat = "PM"
+
+    # final formatting for the return
+    # to account for minutes being of lenght 1
+    if len(str(minutes)) == 1:
+        minutesstr = "0" + str(minutes)
+    else:
+        minutesstr = str(minutes)
+
+    finalformat = str(tothrs) + ":" + minutesstr + " " + returnformat
+
+    return finalformat
 
 
-    # calculate the minutes
-    def calc_minutes(hourform):
-        hourform = hourform.split(":")
-        minutes = (int(hourform[0])*60) + int(hourform[1])
-        return minutes
-
-    tottime = calc_minutes(starttime) + calc_minutes(duration)
-
-    # transform back into hour format
-    def hour_form(min):
-        hours = min / 60
-        hours = str(hours).split(".")
-        minutes = min % 60
-        formatted = hours[0] + ":" + str(minutes)
-        return formatted
-
-    tottime = hour_form(tottime)
-
-    return tottime
-
-print(add_time("3:00 PM", "3:10"))
+print(add_time("6:30 PM", "205:12"))

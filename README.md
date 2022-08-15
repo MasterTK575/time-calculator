@@ -19,3 +19,6 @@ Process:
     5. Account for returning many days later
 
 What I've learned:
+    1. How to use loops correctly
+    2. How to iterate through AM/PM time formats
+    3. How to use variables to keep track of time formats and days
