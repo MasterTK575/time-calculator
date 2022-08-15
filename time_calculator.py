@@ -44,7 +44,6 @@ def add_time(start, duration, day = None):
     loopcount = tothrs
     count = 1
     daycount = 0
-
     # every 12 counts aka hrs we increase the format counter (we ran through one AM/PM cycle)
     # every 24 hrs we increase the day counter
     while loopcount > 0:
@@ -60,6 +59,7 @@ def add_time(start, duration, day = None):
     if tothrs == 0:
         tothrs = 12
 
+    # get the AM/PM format for the result
     if formcount % 2 == 0:
         returnformat = "AM"
     else:
@@ -71,8 +71,21 @@ def add_time(start, duration, day = None):
         minutesstr = "0" + str(minutes)
     else:
         minutesstr = str(minutes)
+    
+    # formatting for days later
+    # to account for an PM to AM daychange
+    if format == "PM" and formcount >= 2:
+        daycount = daycount + 1
+    
+    if daycount == 0:
+        message = ""
+    elif daycount == 1:
+        message = " (next day)"
+    else:
+        message = " (" + str(daycount) + " days later" + ")"
 
-    finalformat = str(tothrs) + ":" + minutesstr + " " + returnformat
+    
+    finalformat = str(tothrs) + ":" + minutesstr + " " + returnformat + message
 
     return finalformat
 
